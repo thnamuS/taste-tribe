@@ -25,6 +25,7 @@ export interface Recipe {
   updatedAt: string;
   category: string;
   views: number;
+  youtubeLink?: string;
 }
 export interface RecipeFormData {
   title: string;
@@ -32,6 +33,7 @@ export interface RecipeFormData {
   cookingTime: number;
   ingredients: string[];
   instructions: string[];
-  image?: File;
+  image: File;
   category: string;
+  youtubeUrl: string;
 }

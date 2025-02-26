@@ -40,12 +40,13 @@ const RECIPES: Recipe[] = [
     },
     createdAt: "2023-05-15T10:30:00Z",
     updatedAt: "2023-05-15T10:30:00Z",
-    category: "Italian",
+    category: "quick",
     views: 1234,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "2",
-    title: "Homemade Margherita Pizza",
+    title: "Homemade Marghrita Pizza",
     description:
       "A simple yet delicious pizza with fresh tomatoes, mozzarella, and basil.",
     image:
@@ -79,6 +80,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-06-20T14:15:00Z",
     category: "Italian",
     views: 987,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "3",
@@ -121,6 +123,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-04-10T09:45:00Z",
     category: "Dessert",
     views: 567,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "4",
@@ -161,6 +164,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-03-05T12:00:00Z",
     category: "Soup",
     views: 890,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "5",
@@ -199,6 +203,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-06-20T12:15:00Z",
     category: "Italian",
     views: 1450,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "6",
@@ -235,6 +240,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-07-05T08:45:00Z",
     category: "Italian",
     views: 2200,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "7",
@@ -276,6 +282,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-08-10T14:20:00Z",
     category: "Mexican",
     views: 1850,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "8",
@@ -313,6 +320,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-09-12T11:00:00Z",
     category: "Seafood",
     views: 1900,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "9",
@@ -347,6 +355,7 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-10-05T09:30:00Z",
     category: "Salad",
     views: 1200,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "10",
@@ -388,6 +397,54 @@ const RECIPES: Recipe[] = [
     updatedAt: "2023-11-18T14:50:00Z",
     category: "American",
     views: 2100,
+    youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  },
+  {
+    id: "11",
+    title: "Spicy Mango Chicken Wrap",
+    description:
+      "A delicious wrap filled with spicy grilled chicken, fresh mango salsa, and a creamy yogurt sauce.",
+    image:
+      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.thetastychilli.com%2Fwp-content%2Fuploads%2F2022%2F05%2Fmango-chicken-wrap-cilantro-1024x692.jpg&f=1&nofb=1&ipt=614e7f3d2736e64348065ec64b3f628c2fdfba19e7b50d738127542d782175e4&ipo=images",
+    ingredients: [
+      "2 chicken breasts",
+      "1 tsp paprika",
+      "1/2 tsp cayenne pepper",
+      "1/2 tsp garlic powder",
+      "Salt and pepper to taste",
+      "1 tbsp olive oil",
+      "1 ripe mango, diced",
+      "1/2 red onion, chopped",
+      "1/2 red bell pepper, chopped",
+      "1/4 cup fresh cilantro, chopped",
+      "1 lime, juiced",
+      "1/2 cup Greek yogurt",
+      "1 tsp honey",
+      "4 whole wheat tortillas",
+    ],
+    instructions: [
+      "Season chicken breasts with paprika, cayenne, garlic powder, salt, and pepper.",
+      "Heat olive oil in a pan over medium heat and cook chicken for 5-6 minutes per side until fully cooked.",
+      "Let the chicken rest for a few minutes, then slice into strips.",
+      "In a bowl, mix mango, red onion, bell pepper, cilantro, and lime juice to make mango salsa.",
+      "In a small bowl, combine Greek yogurt and honey to make the sauce.",
+      "Warm tortillas and spread with yogurt sauce.",
+      "Add chicken strips and top with mango salsa.",
+      "Roll the tortillas tightly into wraps and serve.",
+    ],
+    cookingTime: 30,
+    rating: 4.8,
+    ratingCount: 120,
+    author: {
+      id: "9",
+      name: "Sophia Green",
+      image: "https://avatar.iran.liara.run/public/11",
+    },
+    createdAt: "2023-12-10T10:30:00Z",
+    updatedAt: "2023-12-10T10:30:00Z",
+    category: "Exotic",
+    views: 1800,
+    youtubeLink: "https://www.youtube.com/watch?v=oHg5SJYRHA0",
   },
 ];
 

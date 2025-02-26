@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Filter, Search, ChefHat, ArrowUpDown } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import {
+  Filter,
+  Search,
+  ChefHat,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Recipe } from "@/types/recipe";
 import { Button } from "@/components/ui/button";
@@ -18,14 +26,29 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { getAllRecipes } from "@/lib/recipes";
 
+// Number of recipes per page
+const RECIPES_PER_PAGE = 10;
+
 export default function RecipesPage() {
+  const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams.get("category");
+
+  // Convert URL parameter formats like "quick-easy" to match your categories format
+  const normalizeCategory = (category: string) => {
+    if (category === "quick-easy") return "quick";
+    return category;
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(
+    categoryFromUrl ? normalizeCategory(categoryFromUrl) : "all",
+  );
   const [cookingTime, setCookingTime] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function loadRecipes() {
@@ -41,6 +64,18 @@ export default function RecipesPage() {
 
     loadRecipes();
   }, []);
+
+  // Update the selected category when the URL parameter changes
+  useEffect(() => {
+    if (categoryFromUrl) {
+      setSelectedCategory(normalizeCategory(categoryFromUrl));
+    }
+  }, [categoryFromUrl]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, cookingTime, sortBy]);
 
   const filteredRecipes = recipes
     .filter((recipe) => {
@@ -84,6 +119,19 @@ export default function RecipesPage() {
           );
       }
     });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredRecipes.length / RECIPES_PER_PAGE);
+  const paginatedRecipes = filteredRecipes.slice(
+    (currentPage - 1) * RECIPES_PER_PAGE,
+    currentPage * RECIPES_PER_PAGE,
+  );
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page);
+    // Scroll to top when page changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -248,8 +296,8 @@ export default function RecipesPage() {
                       {cookingTime === "quick"
                         ? "< 30 mins"
                         : cookingTime === "medium"
-                        ? "30-60 mins"
-                        : "> 60 mins"}
+                          ? "30-60 mins"
+                          : "> 60 mins"}
                       <button
                         className="ml-1"
                         onClick={() => setCookingTime("all")}
@@ -292,12 +340,13 @@ export default function RecipesPage() {
                 {sortBy === "newest"
                   ? "Newest"
                   : sortBy === "popular"
-                  ? "Most Popular"
-                  : "Highest Rated"}
+                    ? "Most Popular"
+                    : "Highest Rated"}
               </Badge>
             </div>
             <span className="text-sm text-gray-600">
-              Showing {filteredRecipes.length} recipes
+              Showing {Math.min(paginatedRecipes.length, RECIPES_PER_PAGE)} of{" "}
+              {filteredRecipes.length} recipes
             </span>
           </div>
 
@@ -312,7 +361,7 @@ export default function RecipesPage() {
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
               >
                 {filteredRecipes.length > 0 ? (
-                  filteredRecipes.map((recipe) => (
+                  paginatedRecipes.map((recipe) => (
                     <motion.div
                       key={recipe.id}
                       layout
@@ -343,6 +392,97 @@ export default function RecipesPage() {
                 )}
               </motion.div>
             </AnimatePresence>
+          )}
+
+          {/* Pagination Controls */}
+          {filteredRecipes.length > RECIPES_PER_PAGE && !loading && (
+            <div className="mt-12 flex justify-center">
+              <nav className="flex items-center gap-1">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="border-amber-200 text-amber-700 hover:bg-amber-50"
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+
+                <div className="flex gap-1">
+                  {/* Show page numbers with ellipsis for many pages */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((page) => {
+                      // Always show first and last page
+                      if (page === 1 || page === totalPages) return true;
+                      // Always show current page and one before/after
+                      if (Math.abs(page - currentPage) <= 1) return true;
+                      // Don't show other pages
+                      return false;
+                    })
+                    .map((page, index, array) => {
+                      // If there's a gap in the shown pages, add an ellipsis
+                      if (index > 0 && page - array[index - 1] > 1) {
+                        return (
+                          <div
+                            key={`ellipsis-${page}`}
+                            className="flex items-center"
+                          >
+                            <span className="mx-1 text-gray-500">...</span>
+                            <Button
+                              key={page}
+                              variant={
+                                currentPage === page ? "default" : "outline"
+                              }
+                              className={
+                                currentPage === page
+                                  ? "bg-amber-600 hover:bg-amber-700 h-8 w-8 p-0"
+                                  : "border-amber-200 text-amber-700 hover:bg-amber-50 h-8 w-8 p-0"
+                              }
+                              onClick={() => handlePageChange(page)}
+                            >
+                              {page}
+                            </Button>
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <Button
+                          key={page}
+                          variant={currentPage === page ? "default" : "outline"}
+                          className={
+                            currentPage === page
+                              ? "bg-amber-600 hover:bg-amber-700 h-8 w-8 p-0"
+                              : "border-amber-200 text-amber-700 hover:bg-amber-50 h-8 w-8 p-0"
+                          }
+                          onClick={() => handlePageChange(page)}
+                        >
+                          {page}
+                        </Button>
+                      );
+                    })}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="border-amber-200 text-amber-700 hover:bg-amber-50"
+                  onClick={() =>
+                    handlePageChange(Math.min(totalPages, currentPage + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </nav>
+            </div>
+          )}
+
+          {/* Page information */}
+          {filteredRecipes.length > 0 && !loading && (
+            <div className="text-center text-sm text-gray-500 mt-4">
+              Page {currentPage} of {totalPages}
+            </div>
           )}
         </div>
       </div>
